@@ -14,6 +14,14 @@
     "type": "git",
     "url": "git+https://github.com/sunrabbit123/es-json.git"
   },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": "./dist/index.js"
+  },
   "author": "sunrabbit123",
   "license": "Apache-2.0",
   "bugs": {

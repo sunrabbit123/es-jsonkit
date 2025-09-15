@@ -15,7 +15,7 @@ export function removeTrailingCommas(json: string): string {
   const isWhitespace = (c: string) => /\s/.test(c);
   const isClosing = (c: string | null) => c === "]" || c === "}";
   const nextNonWhitespace = (arr: string[], start: number): string | null =>
-    start >= arr.length
+    start >= arr.length || arr[start] === undefined
       ? null
       : isWhitespace(arr[start])
       ? nextNonWhitespace(arr, start + 1)
