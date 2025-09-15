@@ -20,12 +20,6 @@ jobs:
 
       - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444
       - run: npm i --frozen-lockfile
-          
-      - name: Configure npm token
-        run: |
-          npm config set npmRegistryServer https://registry.npmjs.org
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH }}
 
       - name: Publish to NPM
         run: npm publish --access public
