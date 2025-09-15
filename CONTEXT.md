@@ -52,6 +52,13 @@ es-json is a JavaScript/TypeScript utility library focused on JSON manipulation,
 - Ensure all code passes oxlint and TypeScript compilation
 - Use npm scripts for all development tasks
 
+### Coding Style Guidelines
+- **Declarative Programming**: All code must be written in declarative style
+- **Variable Declaration**: Prefer `const` over `let` whenever possible
+- **IIFE for Mutable State**: When `let` variables are necessary, wrap them in an IIFE (Immediately Invoked Function Expression) to isolate the context and maintain functional purity
+- **Immutable Operations**: Favor immutable operations and functional programming patterns
+- **Pure Functions**: Functions should be pure when possible, avoiding side effects
+
 ### Commit Guidelines
 - Use conventional commit format
 - Write clear, descriptive commit messages in English

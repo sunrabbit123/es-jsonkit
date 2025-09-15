@@ -20,25 +20,51 @@ npm install es-json
 ## Quick Start
 
 ```javascript
-import { merge, correct, transform } from 'es-json';
+import { addMissingBraces, removeEmptyObjectPrefix, removeTrailingCommas } from 'es-json';
 
-// Merge JSON objects
-const merged = merge(obj1, obj2);
+// Fix missing closing braces
+const fixedBraces = addMissingBraces('{"key": "value"');
+// Result: '{"key": "value"}'
 
-// Correct malformed JSON
-const corrected = correct(malformedJsonString);
+// Remove empty object prefixes
+const cleaned = removeEmptyObjectPrefix('{}{"key": "value"}');
+// Result: '{"key": "value"}'
 
-// Transform JSON structure
-const transformed = transform(data, transformRules);
+// Remove trailing commas
+const validJson = removeTrailingCommas('{"key": "value",}');
+// Result: '{"key": "value"}'
 ```
 
 ## API Documentation
 
 ### Functions
 
-*Note: This section will be updated as functions are implemented.*
+#### `addMissingBraces(input: string): string`
 
-<!-- Functions will be documented here as they are added -->
+Automatically adds missing closing braces and brackets to malformed JSON strings. Handles nested structures and fixes mismatched braces.
+
+```javascript
+addMissingBraces('{"users": [{"name": "John"');
+// Returns: '{"users": [{"name": "John"}]}'
+```
+
+#### `removeEmptyObjectPrefix(json: string): string`
+
+Removes empty object prefixes (`{}`) from JSON strings that may have been corrupted with leading empty objects.
+
+```javascript
+removeEmptyObjectPrefix('{}{"valid": "data"}');
+// Returns: '{"valid": "data"}'
+```
+
+#### `removeTrailingCommas(json: string): string`
+
+Removes trailing commas from JSON objects and arrays to make them valid JSON. Properly handles commas inside strings.
+
+```javascript
+removeTrailingCommas('{"key": "value", "array": [1, 2, 3,],}');
+// Returns: '{"key": "value", "array": [1, 2, 3]}'
+```
 
 ## Features
 
