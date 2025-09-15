@@ -1,0 +1,29 @@
+{
+  "name": "es-json",
+  "version": "0.1.0",
+  "description": "A powerful and efficient JavaScript/TypeScript utility library for JSON manipulation and operations.",
+  "scripts": {
+    "test": "vitest",
+    "test:watch": "vitest watch",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "build": "tsc",
+    "release": "bumpp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sunrabbit123/es-json.git"
+  },
+  "author": "sunrabbit123",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/sunrabbit123/es-json/issues"
+  },
+  "homepage": "https://github.com/sunrabbit123/es-json#readme",
+  "devDependencies": {
+    "bumpp": "^10.2.3",
+    "oxlint": "^1.15.0",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  }
+}
