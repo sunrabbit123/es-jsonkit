@@ -1,5 +1,5 @@
 {
-  "name": "es-json",
+  "name": "es-jsonkit",
   "version": "0.1.0",
   "description": "A powerful and efficient JavaScript/TypeScript utility library for JSON manipulation and operations.",
   "scripts": {
