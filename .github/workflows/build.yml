@@ -1,0 +1,58 @@
+name: 🏗️ Build
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: 🏗️ TypeScript 빌드
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18, 20, 22]
+    steps:
+      - name: 📥 소스코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: 📦 Node.js ${{ matrix.node-version }} 설정
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: 📥 의존성 설치
+        run: npm ci
+
+      - name: 🏗️ TypeScript 빌드
+        run: |
+          echo "🏗️ TypeScript를 JavaScript로 컴파일합니다..."
+          npm run build
+
+      - name: 📋 빌드 결과 확인
+        run: |
+          echo "📋 빌드된 파일들을 확인합니다..."
+          ls -la dist/
+          echo "📊 빌드 완료!"
+
+      - name: 📤 빌드 아티팩트 업로드 (Node.js 20만)
+        if: matrix.node-version == 20
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: dist/
+          retention-days: 30
+
+      - name: ✅ 빌드 성공
+        if: success()
+        run: |
+          echo "✅ Node.js ${{ matrix.node-version }}에서 빌드가 성공적으로 완료되었습니다!"
+
+      - name: ❌ 빌드 실패
+        if: failure()
+        run: |
+          echo "❌ Node.js ${{ matrix.node-version }}에서 빌드가 실패했습니다."
+          echo "🔧 TypeScript 컴파일 오류를 확인하고 수정해주세요."

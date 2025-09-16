@@ -1,0 +1,73 @@
+name: 🧪 Test
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: 🧪 단위 테스트
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18, 20, 22]
+    steps:
+      - name: 📥 소스코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: 📦 Node.js ${{ matrix.node-version }} 설정
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: 📥 의존성 설치
+        run: npm ci
+
+      - name: 🧪 테스트 실행
+        run: |
+          echo "🧪 Vitest로 단위 테스트를 실행합니다..."
+          npm run test:coverage
+
+      - name: 📊 테스트 결과 요약
+        if: always()
+        run: |
+          echo "📊 테스트 실행 완료"
+          echo "Node.js 버전: ${{ matrix.node-version }}"
+
+      - name: 📤 커버리지 리포트 업로드 (Node.js 20만)
+        if: matrix.node-version == 20
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 30
+
+      - name: ✅ 테스트 성공
+        if: success()
+        run: |
+          echo "✅ Node.js ${{ matrix.node-version }}에서 모든 테스트가 통과했습니다!"
+
+      - name: ❌ 테스트 실패
+        if: failure()
+        run: |
+          echo "❌ Node.js ${{ matrix.node-version }}에서 일부 테스트가 실패했습니다."
+          echo "🔧 실패한 테스트를 확인하고 수정해주세요."
+
+  test-summary:
+    name: 📋 테스트 요약
+    runs-on: ubuntu-latest
+    needs: test
+    if: always()
+    steps:
+      - name: 📋 전체 테스트 결과 요약
+        run: |
+          echo "📋 모든 Node.js 버전에서의 테스트가 완료되었습니다."
+          if [ "${{ needs.test.result }}" == "success" ]; then
+            echo "✅ 모든 Node.js 버전(18, 20, 22)에서 테스트 통과!"
+          else
+            echo "❌ 일부 Node.js 버전에서 테스트 실패"
+          fi

@@ -1,5 +1,11 @@
 # es-json
 
+[![CI](https://github.com/sunrabbit123/es-jsonkit/actions/workflows/ci.yml/badge.svg)](https://github.com/sunrabbit123/es-jsonkit/actions/workflows/ci.yml)
+[![Lint](https://github.com/sunrabbit123/es-jsonkit/actions/workflows/lint.yml/badge.svg)](https://github.com/sunrabbit123/es-jsonkit/actions/workflows/lint.yml)
+[![Build](https://github.com/sunrabbit123/es-jsonkit/actions/workflows/build.yml/badge.svg)](https://github.com/sunrabbit123/es-jsonkit/actions/workflows/build.yml)
+[![Test](https://github.com/sunrabbit123/es-jsonkit/actions/workflows/test.yml/badge.svg)](https://github.com/sunrabbit123/es-jsonkit/actions/workflows/test.yml)
+[![npm version](https://badge.fury.io/js/es-jsonkit.svg)](https://badge.fury.io/js/es-jsonkit)
+
 A powerful and efficient JavaScript/TypeScript utility library for JSON manipulation and operations.
 
 ## Overview
@@ -104,11 +110,14 @@ npm run build
 
 ### Scripts
 
-- `npm test` - Run Vitest tests
+- `npm test` - Run Vitest tests in watch mode
+- `npm run test:run` - Run tests once
+- `npm run test:coverage` - Run tests with coverage report
 - `npm run test:watch` - Run tests in watch mode
-- `npm run lint` - Run oxlint
+- `npm run lint` - Run oxlint to check code quality
 - `npm run lint:fix` - Auto-fix linting issues
 - `npm run build` - Build TypeScript to JavaScript
+- `npm run release` - Create a new release with bumpp
 
 ## Contributing
 

@@ -1,0 +1,42 @@
+name: 🔍 Lint
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  oxlint:
+    name: 🔍 oxlint 검사
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 소스코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: 📦 Node.js 설정
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 📥 의존성 설치
+        run: npm ci
+
+      - name: 🔍 oxlint 실행
+        run: |
+          echo "🔍 oxlint로 코드 품질을 검사합니다..."
+          npm run lint
+        
+      - name: ✅ Lint 성공
+        if: success()
+        run: |
+          echo "✅ 코드 품질 검사가 성공적으로 통과했습니다!"
+          echo "📊 oxlint 검사 완료"
+
+      - name: ❌ Lint 실패
+        if: failure()
+        run: |
+          echo "❌ 코드 품질 검사에서 문제가 발견되었습니다."
+          echo "🔧 'npm run lint:fix'를 실행하여 자동으로 수정할 수 있는 문제들을 해결해보세요."
