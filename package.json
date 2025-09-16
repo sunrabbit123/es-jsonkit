@@ -1,6 +1,6 @@
 {
   "name": "es-jsonkit",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A powerful and efficient JavaScript/TypeScript utility library for JSON manipulation and operations.",
   "scripts": {
     "prepack": "npm run build",
