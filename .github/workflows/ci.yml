@@ -10,14 +10,17 @@ jobs:
   lint:
     name: 🔍 Lint (oxlint)
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18, 20, 22]
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
 
-      - name: 📦 Setup Node.js
+      - name: 📦 Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
       - name: 📥 Install dependencies
@@ -29,14 +32,17 @@ jobs:
   build:
     name: 🏗️ Build
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18, 20, 22]
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
 
-      - name: 📦 Setup Node.js
+      - name: 📦 Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
       - name: 📥 Install dependencies
@@ -45,7 +51,8 @@ jobs:
       - name: 🏗️ Build TypeScript
         run: npm run build
 
-      - name: 📤 Upload build artifacts
+      - name: 📤 Upload build artifacts (Node.js 20 only)
+        if: matrix.node-version == 20
         uses: actions/upload-artifact@v4
         with:
           name: build-output
@@ -55,23 +62,27 @@ jobs:
   test:
     name: 🧪 Test
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18, 20, 22]
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
 
-      - name: 📦 Setup Node.js
+      - name: 📦 Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
       - name: 📥 Install dependencies
         run: npm ci
 
-      - name: 🧪 Run tests
-        run: npm test -- --run --reporter=verbose
+      - name: 🧪 Run tests with coverage
+        run: npm run test:coverage
 
-  # 모든 검사가 통과했을 때만 실행되는 종합 결과 job
+
+  # Summary job that runs only when all checks pass
   ci-success:
     name: ✅ CI Success
     runs-on: ubuntu-latest
@@ -80,7 +91,7 @@ jobs:
     steps:
       - name: ✅ All checks passed
         run: |
-          echo "🎉 모든 CI 검사가 성공적으로 통과했습니다!"
-          echo "✅ Lint 검사 통과"
-          echo "✅ Build 검사 통과" 
-          echo "✅ Test 검사 통과"
+          echo "🎉 All CI checks have passed successfully!"
+          echo "✅ Lint check passed"
+          echo "✅ Build check passed" 
+          echo "✅ Test check passed"
