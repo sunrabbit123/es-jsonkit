@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sunrabbit123/es-json.git"
+    "url": "git+https://github.com/sunrabbit123/es-jsonkit.git"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -26,9 +26,9 @@
   "author": "sunrabbit123",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/sunrabbit123/es-json/issues"
+    "url": "https://github.com/sunrabbit123/es-jsonkit/issues"
   },
-  "homepage": "https://github.com/sunrabbit123/es-json#readme",
+  "homepage": "https://github.com/sunrabbit123/es-jsonkit#readme",
   "devDependencies": {
     "bumpp": "^10.2.3",
     "oxlint": "^1.15.0",
