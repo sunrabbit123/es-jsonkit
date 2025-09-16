@@ -14,16 +14,26 @@ export function removeTrailingCommas(json: string): string {
   const isBackslash = (c: string) => c === "\\";
   const isWhitespace = (c: string) => /\s/.test(c);
   const isClosing = (c: string | null) => c === "]" || c === "}";
-  const nextNonWhitespace = (arr: string[], start: number): string | null =>
+  const nextMeaningfulChar = (arr: string[], start: number): string | null =>
     start >= arr.length || arr[start] === undefined
       ? null
-      : isWhitespace(arr[start])
-      ? nextNonWhitespace(arr, start + 1)
+      : isWhitespace(arr[start]) || arr[start] === ","
+      ? nextMeaningfulChar(arr, start + 1)
       : arr[start];
 
-  type State = { out: string; inString: boolean; escaping: boolean };
+  type State = { 
+    out: string; 
+    inString: boolean; 
+    escaping: boolean; 
+    skippingTrailingCommas: boolean;
+  };
 
-  const initial: State = { out: "", inString: false, escaping: false };
+  const initial: State = { 
+    out: "", 
+    inString: false, 
+    escaping: false, 
+    skippingTrailingCommas: false 
+  };
 
   const final = chars.reduce<State>((s, ch, i, arr) => {
     // Inside a quoted string
@@ -42,6 +52,30 @@ export function removeTrailingCommas(json: string): string {
       return { ...s, out, escaping: false };
     }
 
+    // Currently skipping trailing commas
+    if (s.skippingTrailingCommas) {
+      if (ch === ",") {
+        // Continue skipping consecutive commas
+        return s;
+      }
+      if (isWhitespace(ch)) {
+        // Check if this whitespace is followed by closing bracket
+        const nextChar = nextMeaningfulChar(arr, i + 1);
+        if (isClosing(nextChar)) {
+          // Keep whitespace before closing bracket
+          return { ...s, out: s.out + ch };
+        }
+        // Skip whitespace between commas
+        return s;
+      }
+      if (isClosing(ch)) {
+        // Found closing bracket, stop skipping and include it
+        return { ...s, out: s.out + ch, skippingTrailingCommas: false };
+      }
+      // Found non-comma, non-whitespace, non-closing char - stop skipping
+      return { ...s, out: s.out + ch, skippingTrailingCommas: false };
+    }
+
     // Entering a quoted string
     if (isQuote(ch)) {
       return { ...s, out: s.out + ch, inString: true, escaping: false };
@@ -49,9 +83,11 @@ export function removeTrailingCommas(json: string): string {
 
     // Potential trailing comma (outside string)
     if (ch === ",") {
-      const next = nextNonWhitespace(arr, i + 1);
+      const next = nextMeaningfulChar(arr, i + 1);
       // drop the comma iff the next meaningful token closes the container
-      if (isClosing(next)) return s;
+      if (isClosing(next)) {
+        return { ...s, skippingTrailingCommas: true };
+      }
     }
 
     // Default: append the character

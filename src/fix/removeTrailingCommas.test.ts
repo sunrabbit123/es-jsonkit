@@ -220,7 +220,39 @@ describe('removeTrailingCommas', () => {
 
     test('should handle multiple trailing commas in sequence', () => {
       const input = '{"key": "value",,}';
-      const expected = '{"key": "value",}';
+      const expected = '{"key": "value"}';
+      const result = removeTrailingCommas(input);
+
+      expect(result).toBe(expected);
+    });
+
+    test('should handle many consecutive trailing commas', () => {
+      const input = '{"key": "value",,,,,}';
+      const expected = '{"key": "value"}';
+      const result = removeTrailingCommas(input);
+
+      expect(result).toBe(expected);
+    });
+
+    test('should handle multiple trailing commas with whitespace', () => {
+      const input = '{"key": "value", , , }';
+      const expected = '{"key": "value"   }'; // 공백은 보존됨
+      const result = removeTrailingCommas(input);
+
+      expect(result).toBe(expected);
+    });
+
+    test('should handle multiple trailing commas in arrays', () => {
+      const input = '[1, 2, 3,,,]';
+      const expected = '[1, 2, 3]';
+      const result = removeTrailingCommas(input);
+
+      expect(result).toBe(expected);
+    });
+
+    test('should handle multiple trailing commas in nested structures', () => {
+      const input = '{"outer": {"inner": "value",,,},,}';
+      const expected = '{"outer": {"inner": "value"}}';
       const result = removeTrailingCommas(input);
 
       expect(result).toBe(expected);
