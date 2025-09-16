@@ -12,7 +12,6 @@
     "release": "bumpp"
   },
   "repository": {
-    "type": "git",
     "url": "https://github.com/sunrabbit123/es-json"
   },
   "main": "dist/index.js",
